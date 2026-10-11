@@ -14,9 +14,15 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v4
+        with:
+          accept-android-sdk-licenses: false
+          packages: ''
       - name: Install Android SDK 35
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+        run: |
+          mkdir -p "$ANDROID_HOME/licenses"
+          echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > "$ANDROID_HOME/licenses/android-sdk-license"
+          sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
       - name: Unpack app source
         run: unzip NekiAndroid-source.zip -d project
       - uses: gradle/actions/setup-gradle@v4
